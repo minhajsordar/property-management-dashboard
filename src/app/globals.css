@@ -23,10 +23,10 @@ body {
   background-clip: text !important;
   -webkit-background-clip: text !important;
   color: transparent !important;
-  background: linear-gradient(145deg, #124800 23%, #00ff51 60%);
+  background: linear-gradient(0deg, #124800 23%, #00a434 60%);
 }
 .dark .gradient-text{
-  background: linear-gradient(145deg, #fff 23%, #81ffed 60%);
+  background: linear-gradient(0deg, #00aa36 23%, #b5ff9a 60%);
 }
 
 .section-background{
@@ -81,5 +81,20 @@ body {
 @layer components {
   .card-shadow{
     @apply shadow shadow-[rgba(29,215,96,0.5)]
+  }
+}
+.flash-highlight {
+  animation: flash 1s ease-in-out;
+}
+
+@keyframes flash {
+  0% {
+    box-shadow: 0 0 20px 5px rgba(165, 255, 198, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 10px 2px rgba(29,215,96, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(29,215,96, 0);
   }
 }

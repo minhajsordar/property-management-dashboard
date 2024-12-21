@@ -69,8 +69,8 @@ const PropertyDashboard = () => {
       </section>
 
       {/* Filters and create new */}
-      <section id="filter" className=" mb-6">
-          <h2 className="text-lg font-bold mb-4 gradient-text">Filter Properties</h2>
+      <section className=" mb-6">
+        <h2 className="text-lg font-bold mb-4 gradient-text">Filter Properties</h2>
         <div id="filter" className="bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 flex justify-between items-end flex-wrap gap-3 card-shadow rounded-md">
           <div>
             <div className="flex flex-col md:flex-row gap-4">
@@ -104,7 +104,7 @@ const PropertyDashboard = () => {
           {/* Add Property Button */}
           <div>
             <button
-              className="bg-[#1dd760] text-black px-4 py-2 rounded-md"
+              className="bg-[#1dd760] text-black px-4 py-2 rounded-full"
               onClick={() => setIsModalOpen(true)}
             >
               Add New Property
@@ -115,39 +115,39 @@ const PropertyDashboard = () => {
 
       {/* Properties List */}
       <section>
-      <h2 className="text-lg font-bold mb-4 w-full md:w-1/4 gradient-text">Properties</h2>
-      <div id="properties" className="relative bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 card-shadow rounded-md">
-        <div className="space-y-4">
-          {filteredProperties.length > 0 ? (
-            filteredProperties.map((property) => (
-              <div
-                key={property.id}
-                className="flex justify-between items-center border-b dark:border-gray-500 pb-2 last:border-b-0"
-              >
-                <div>
-                  <p className="font-medium">{property.name}</p>
-                  <p className="text-sm text-gray-400">{property.type}</p>
-                </div>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm ${property.status === 'Available'
-                    ? 'bg-green-100 text-green-600'
-                    : 'bg-gray-200 text-gray-600'
-                    }`}
+        <h2 className="text-lg font-bold mb-4 w-full md:w-1/4 gradient-text">Properties</h2>
+        <div id="properties" className="relative bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 card-shadow rounded-md">
+          <div className="space-y-4">
+            {filteredProperties.length > 0 ? (
+              filteredProperties.map((property) => (
+                <div
+                  key={property.id}
+                  className="flex justify-between items-center border-b dark:border-gray-500 pb-2 last:border-b-0"
                 >
-                  {property.status}
-                </span>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500">No properties found</p>
-          )}
-        </div>
-        <div className="section-background">
-          <div className="background-gradient">
-            <div className="gradient-line"></div>
+                  <div>
+                    <p className="font-medium">{property.name}</p>
+                    <p className="text-sm text-gray-400">{property.type}</p>
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm ${property.status === 'Available'
+                      ? 'bg-green-100 text-green-600'
+                      : 'bg-gray-200 text-gray-600'
+                      }`}
+                  >
+                    {property.status}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No properties found</p>
+            )}
+          </div>
+          <div className="section-background">
+            <div className="background-gradient">
+              <div className="gradient-line"></div>
+            </div>
           </div>
         </div>
-      </div>
       </section>
 
       {/* Add Property Modal */}
@@ -166,7 +166,7 @@ const PropertyDashboard = () => {
                 }
               />
               <select
-                className="border rounded-md p-2 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+                className="border rounded-full p-2 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
                 value={newProperty.type}
                 onChange={(e) =>
                   setNewProperty({ ...newProperty, type: e.target.value })
@@ -177,7 +177,7 @@ const PropertyDashboard = () => {
                 <option value="Commercial">Commercial</option>
               </select>
               <select
-                className="border rounded-md p-2 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+                className="border rounded-full p-2 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
                 value={newProperty.status}
                 onChange={(e) =>
                   setNewProperty({ ...newProperty, status: e.target.value })
@@ -189,13 +189,13 @@ const PropertyDashboard = () => {
             </div>
             <div className="flex justify-end gap-4 mt-4">
               <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-full"
                 onClick={() => setIsModalOpen(false)}
               >
                 Cancel
               </button>
               <button
-                className="bg-green-600 text-white px-4 py-2 rounded-md"
+                className="bg-green-600 text-white px-4 py-2 rounded-full"
                 onClick={handleAddProperty}
               >
                 Add

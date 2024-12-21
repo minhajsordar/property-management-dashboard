@@ -7,20 +7,15 @@ const ToggleButton = () => {
   const toggleTheme = () => {
     const newtheme = theme === "light" ? "dark" : "light"
     setTheme(newtheme)
+    const previousTheme = theme
+    document.documentElement.classList.remove(previousTheme);
+    document.documentElement.classList.add(newtheme);
+    localStorage.setItem('theme', newtheme);
   }
   useEffect(() => {
-    const newtheme = theme
-    const previousTheme = theme === "light" ? "dark" : "light"
-    document.documentElement.classList.remove(previousTheme);
-    document.documentElement.classList.add(newtheme);
-    localStorage.setItem('theme', theme);
-  }, [theme])
-  useEffect(() => {
     const newtheme = localStorage.getItem('theme') || "light"
-    const previousTheme = newtheme === "light" ? "dark" : "light"
-    document.documentElement.classList.remove(previousTheme);
     document.documentElement.classList.add(newtheme);
-    localStorage.getItem('theme')
+    setTheme(newtheme)
   }, [])
   return (
     <div className={styles.container}>
@@ -42,11 +37,11 @@ const ToggleButton = () => {
           >
             <g>
               <path
-                fill="#8C8883"
+                fill="#afafaf"
                 d="M397.017 370.594c-145.51 0-263.459-117.941-263.459-263.459 0-38.156 8.184-74.382 22.788-107.126C64.232 41.07.012 133.364.012 240.703c0 145.495 117.965 263.444 263.452 263.444 107.339 0 199.625-64.228 240.672-156.325C471.406 362.409 435.172 370.594 397.017 370.594z"
               />
               <path
-                fill="#7C7B7A"
+                fill="#fafafa"
                 d="M305.471 435.877c77.296 0 146.684-33.422 194.851-86.473-31.736 13.556-66.615 21.181-103.306 21.181-145.51 0-263.459-117.941-263.459-263.459 0-38.156 8.184-74.382 22.788-107.126-36.328 16.211-68.206 40.464-93.633 70.38-13.233 31.397-20.693 65.827-20.693 102.053C42.019 317.921 159.976 435.877 305.471 435.877z"
               />
               <g fill="#99948F">

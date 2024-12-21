@@ -1,7 +1,7 @@
 import ToggleButton from "@/components/Button/ToggleButton";
+import Navigation from "@/components/Navigation";
 import PropertyDashboard from "@/components/PropertyDashboard";
-import Image from "next/image";
-import Link from "next/link";
+
 
 export default function Home() {
   return (
@@ -12,14 +12,7 @@ export default function Home() {
           <div className="mb-6 flex justify-between header-section p-6">
             <div></div>
             <div>
-              <nav className='flex gap-3'>
-                <Link className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1" href={"#filter"}>
-                  Filter
-                </Link>
-                <Link className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1" href={"#properties"}>
-                  Properties
-                </Link>
-              </nav>
+              <Navigation/>
             </div>
             <div className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1">
               {/* Theme toggler */}
