@@ -1,50 +1,137 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 
 const PropertyDashboard = () => {
-  const [properties, setProperties] = useState([
-    { id: 1, name: 'Greenwood Apartments', type: 'Apartment', status: 'Available' },
-    { id: 2, name: 'Sunny Hills Villa', type: 'House', status: 'Rented' },
-    { id: 3, name: 'Downtown Office Space', type: 'Commercial', status: 'Available' },
-  ]);
-  const [filter, setFilter] = useState({ type: '', status: '' });
+  const staticDate = "21/12/2024, 18:48:50"
+  const initialProperties = [
+    {
+      id: 1,
+      name: "Greenwood Apartments",
+      type: "Apartment",
+      status: "Available",
+      createdAt: staticDate,
+      updatedAt: staticDate,
+    },
+    {
+      id: 2,
+      name: "Sunny Hills Villa",
+      type: "House",
+      status: "Rented",
+      createdAt: staticDate,
+      updatedAt: staticDate,
+    },
+    {
+      id: 3,
+      name: "Downtown Office Space",
+      type: "Commercial",
+      status: "Available",
+      createdAt: staticDate,
+      updatedAt: staticDate,
+    },
+  ]
+  const [properties, setProperties] = useState(initialProperties);
+  const [filteredProperties, setfilteredProperties] = useState(initialProperties)
+  const [sortConfig, setSortConfig] = useState({ key: "createdAt", direction: "ascending" });
+  const [filter, setFilter] = useState({ type: "", status: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProperty, setNewProperty] = useState({
-    name: '',
-    type: 'Apartment',
-    status: 'Available',
-  });
-
-  // Filtered Properties
-  const filteredProperties = properties.filter((property) => {
-    return (
-      (filter.type ? property.type === filter.type : true) &&
-      (filter.status ? property.status === filter.status : true)
-    );
+    name: "",
+    type: "Apartment",
+    status: "Available",
   });
 
   // Handle New Property Submission
   const handleAddProperty = () => {
-    const updatedProperties = [
-      ...properties,
-      { ...newProperty, id: properties.length + 1 },
-    ]
-    localStorage.setItem("properties", JSON.stringify(updatedProperties))
+    if (!newProperty.name.trim()) {
+      alert("Property name is required.");
+      return;
+    }
+
+    if (properties.some((prop) => prop.name === newProperty.name)) {
+      alert("Property name must be unique.");
+      return;
+    }
+
+    const newProp = {
+      ...newProperty,
+      id: properties.length + 1,
+      createdAt: new Date().toLocaleString(),
+      updatedAt: new Date().toLocaleString(),
+    };
+
+    const updatedProperties = [...properties, newProp];
     setProperties(updatedProperties);
+    localStorage.setItem("properties", JSON.stringify(updatedProperties));
     setIsModalOpen(false);
-    setNewProperty({ name: '', type: 'Apartment', status: 'Available' });
+    setNewProperty({ name: "", type: "Apartment", status: "Available" });
   };
+
+  // Handle Status Update
+  const handleStatusUpdate = (id, newStatus) => {
+    const updatedProperties = properties.map((property) =>
+      property.id === id
+        ? { ...property, status: newStatus, updatedAt: new Date().toLocaleString() }
+        : property
+    );
+    setProperties(updatedProperties);
+    localStorage.setItem("properties", JSON.stringify(updatedProperties));
+  };
+
+  // Handle Delete
+  const handleDeleteProperty = (id) => {
+    const updatedProperties = properties.filter((property) => property.id !== id);
+    setProperties(updatedProperties);
+    setfilteredProperties(updatedProperties)
+    localStorage.setItem("properties", JSON.stringify(updatedProperties));
+  };
+  // Handle sort operation
+  const handleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+  // Update table on sorting, filtering, and adding new item.
+  React.useEffect(() => {
+    const sortedAndFilteredData = [...JSON.parse(JSON.stringify(properties))].filter((property) => {
+      return (
+        (filter.type ? property.type === filter.type : true) &&
+        (filter.status ? property.status === filter.status : true)
+      );
+    }).sort((a, b) => {
+      const key = sortConfig.key
+      const direction = sortConfig.direction
+      if (key) {
+        const aValue = a[key];
+        const bValue = b[key];
+
+        if (aValue < bValue) {
+          return direction === "ascending" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return direction === "ascending" ? 1 : -1;
+        }
+      }
+      return 0;
+    })
+    setfilteredProperties(sortedAndFilteredData)
+  }, [filter, sortConfig, properties]);
+  // Parse data from localStorage
   React.useEffect(() => {
     const storedProperties = localStorage.getItem("properties");
     if (storedProperties) {
       setProperties(JSON.parse(storedProperties));
     }
-  }, [])
+  }, []);
+
   return (
-    <div className="min-h-screen px-2 md:px-6">
-      {/* Title section */}
+    <div className="min-h-[calc(100vh_-_170px)] px-2 md:px-6">
+      {/* Title Section */}
       <section className="mb-6">
-        <h1 className="text-3xl font-bold gradient-text">Property Management Dashboard</h1>
+        <h1 className="text-3xl font-bold gradient-text">
+          Property Management Dashboard
+        </h1>
         <p className="text-gray-500">Manage your properties efficiently</p>
       </section>
 
@@ -68,14 +155,17 @@ const PropertyDashboard = () => {
         </div>
       </section>
 
-      {/* Filters and create new */}
-      <section className=" mb-6">
+      {/* Filters and Add Property */}
+      <section className="mb-6">
         <h2 className="text-lg font-bold mb-4 gradient-text">Filter Properties</h2>
-        <div id="filter" className="bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 flex justify-between items-end flex-wrap gap-3 card-shadow rounded-md">
+        <div
+          id="filter"
+          className="bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 flex justify-between items-end flex-wrap gap-3 card-shadow rounded-md"
+        >
           <div>
             <div className="flex flex-col md:flex-row gap-4">
               <div>
-                <h4 className='mb-1'>Types</h4>
+                <h4 className="mb-1">Types</h4>
                 <select
                   className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
                   value={filter.type}
@@ -88,7 +178,7 @@ const PropertyDashboard = () => {
                 </select>
               </div>
               <div>
-                <h4 className='mb-1'>Status</h4>
+                <h4 className="mb-1">Status</h4>
                 <select
                   className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
                   value={filter.status}
@@ -101,10 +191,9 @@ const PropertyDashboard = () => {
               </div>
             </div>
           </div>
-          {/* Add Property Button */}
-          <div>
+          <div className="animated-outline p-[2px] relative max-w-max max-h-max rounded-full overflow-hidden">
             <button
-              className="bg-[#1dd760] text-black px-4 py-2 rounded-full"
+              className="bg-[#1dd760] text-black px-4 py-2 rounded-full relative z-[999]"
               onClick={() => setIsModalOpen(true)}
             >
               Add New Property
@@ -114,40 +203,117 @@ const PropertyDashboard = () => {
       </section>
 
       {/* Properties List */}
-      <section>
-        <h2 className="text-lg font-bold mb-4 w-full md:w-1/4 gradient-text">Properties</h2>
-        <div id="properties" className="relative bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 card-shadow rounded-md">
-          <div className="space-y-4">
-            {filteredProperties.length > 0 ? (
-              filteredProperties.map((property) => (
-                <div
-                  key={property.id}
-                  className="flex justify-between items-center border-b dark:border-gray-500 pb-2 last:border-b-0"
-                >
-                  <div>
-                    <p className="font-medium">{property.name}</p>
-                    <p className="text-sm text-gray-400">{property.type}</p>
-                  </div>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm ${property.status === 'Available'
-                      ? 'bg-green-100 text-green-600'
-                      : 'bg-gray-200 text-gray-600'
-                      }`}
+      <section className="relative">
+
+        <h2 className="text-lg font-bold mb-4">
+          <span className="gradient-text">Properties</span>{` (${properties.length})`}
+        </h2>
+        <div
+          id="properties"
+          className="relative bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 card-shadow rounded-md w-full overflow-auto"
+        >
+          <table className="w-full">
+            <thead>
+              <tr>
+                {[
+                  { label: "Name", key: "name" },
+                  { label: "Type", key: "type" },
+                  { label: "Status", key: "status" },
+                  { label: "Created At", key: "createdAt" },
+                  { label: "Updated At", key: "updatedAt" },
+                ].map((column) => (
+                  <th
+                    key={column.key}
+                    className="text-left p-4 cursor-pointer"
+                    onClick={() => handleSort(column.key)}
                   >
-                    {property.status}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No properties found</p>
-            )}
-          </div>
-          <div className="section-background">
-            <div className="background-gradient">
-              <div className="gradient-line"></div>
-            </div>
+                    {column.label}
+                    <svg
+                      className={`w-4 h-4 inline-block ml-2 ${sortConfig.key === column.key
+                        ? sortConfig.direction === "ascending"
+                          ? "rotate-0"
+                          : "rotate-180"
+                        : ""
+                        }`}
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 20V10m0 10-3-3m3 3 3-3m5-13"
+                      />
+                    </svg>
+                  </th>
+                ))}
+                <th className="text-right p-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProperties.length > 0 ? (
+                filteredProperties.map((property) => (
+                  <tr key={property.id} className="border-t dark:border-gray-500">
+                    <td className="font-medium p-4 text-nowrap">{property.name}</td>
+                    <td className="text-sm text-gray-400 p-4">{property.type}</td>
+                    <td className=" p-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm  text-nowrap ${property.status === "Available"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-gray-200 text-gray-600"
+                          }`}
+                      >
+                        {property.status}
+                      </span>
+                    </td>
+                    <td className="text-sm text-gray-400 p-4">
+                      {property?.createdAt}
+                    </td>
+                    <td className="text-sm text-gray-400 p-4">
+                      {property.updatedAt}
+                    </td>
+                    <td className=" p-4">
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() =>
+                            handleStatusUpdate(
+                              property.id,
+                              property.status === "Available"
+                                ? "Rented"
+                                : "Available"
+                            )
+                          }
+                          className="text-sm bg-blue-500 text-white px-3 py-1 rounded-full  text-nowrap"
+                        >
+                          Toggle Status
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProperty(property.id)}
+                          className="text-sm bg-red-500 text-white px-3 py-1 rounded-full  text-nowrap"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-gray-500">No properties found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="section-background">
+          <div className="background-gradient">
+            <div className="gradient-line" />
           </div>
         </div>
+
       </section>
 
       {/* Add Property Modal */}
@@ -159,14 +325,14 @@ const PropertyDashboard = () => {
               <input
                 type="text"
                 placeholder="Property Name"
-                className="border rounded-md p-2 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+                className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
                 value={newProperty.name}
                 onChange={(e) =>
                   setNewProperty({ ...newProperty, name: e.target.value })
                 }
               />
               <select
-                className="border rounded-full p-2 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+                className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
                 value={newProperty.type}
                 onChange={(e) =>
                   setNewProperty({ ...newProperty, type: e.target.value })
@@ -177,7 +343,7 @@ const PropertyDashboard = () => {
                 <option value="Commercial">Commercial</option>
               </select>
               <select
-                className="border rounded-full p-2 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+                className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
                 value={newProperty.status}
                 onChange={(e) =>
                   setNewProperty({ ...newProperty, status: e.target.value })
