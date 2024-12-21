@@ -1,7 +1,5 @@
 "use client"
-import Link from 'next/link';
 import React, { useState } from 'react';
-import ToggleButton from './Button/ToggleButton';
 
 const PropertyDashboard = () => {
   const [properties, setProperties] = useState([

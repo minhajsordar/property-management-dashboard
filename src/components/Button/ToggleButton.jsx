@@ -3,21 +3,25 @@ import React, { useEffect } from "react";
 import styles from "./ToggleButton.module.css";
 
 const ToggleButton = () => {
-  const [theme, setTheme] = React.useState(localStorage.getItem('theme') || 'light');
+  const [theme, setTheme] = React.useState('light');
   const toggleTheme = () => {
     const newtheme = theme === "light" ? "dark" : "light"
     setTheme(newtheme)
-    // document.documentElement.classList.remove(theme);
-    // document.documentElement.classList.add(newtheme);
-    // localStorage.setItem('theme', newtheme);
   }
   useEffect(() => {
-    const newtheme = theme 
+    const newtheme = theme
     const previousTheme = theme === "light" ? "dark" : "light"
     document.documentElement.classList.remove(previousTheme);
     document.documentElement.classList.add(newtheme);
     localStorage.setItem('theme', theme);
   }, [theme])
+  useEffect(() => {
+    const newtheme = localStorage.getItem('theme') || "light"
+    const previousTheme = newtheme === "light" ? "dark" : "light"
+    document.documentElement.classList.remove(previousTheme);
+    document.documentElement.classList.add(newtheme);
+    localStorage.getItem('theme')
+  }, [])
   return (
     <div className={styles.container}>
       <label className={styles.toggle}>
