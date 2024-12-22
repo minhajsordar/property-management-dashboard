@@ -41,6 +41,8 @@ const PropertyDashboard = () => {
   const [sortConfig, setSortConfig] = useState({ key: "createdAt", direction: "ascending" });
   const [filter, setFilter] = useState({ type: "", status: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(null);
+  const [formValidationError, setFormValidationError] = useState(null);
   const [newProperty, setNewProperty] = useState({
     name: "",
     type: "Apartment",
@@ -50,14 +52,15 @@ const PropertyDashboard = () => {
   // Handle New Property Submission
   const handleAddProperty = () => {
     if (!newProperty.name.trim()) {
-      alert("Property name is required.");
+      setFormValidationError("Property name is required.")
       return;
     }
-
+    
     if (properties.some((prop) => prop.name === newProperty.name)) {
-      alert("Property name must be unique.");
+      setFormValidationError("Property name must be unique.")
       return;
     }
+    setFormValidationError(null)
 
     const newProp = {
       ...newProperty,
@@ -86,10 +89,15 @@ const PropertyDashboard = () => {
 
   // Handle Delete
   const handleDeleteProperty = (id) => {
+    setConfirmDeleteModal(id);
+  };
+  const deleteProperty = () => {
+    const id = confirmDeleteModal
     const updatedProperties = properties.filter((property) => property.id !== id);
     setProperties(updatedProperties);
     setfilteredProperties(updatedProperties)
     localStorage.setItem("properties", JSON.stringify(updatedProperties));
+    setConfirmDeleteModal(null)
   };
   // Handle sort key
   const handleSort = (key) => {
@@ -171,78 +179,73 @@ const PropertyDashboard = () => {
         </div>
       </section>
 
-      {/* Filters and Add Property */}
+      {/* Filters  */}
       <section className="mb-6">
         <h2 className="text-lg font-bold mb-4 gradient-text">Filter Properties</h2>
         <div
           id="filter"
-          className="bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 flex justify-between items-end flex-wrap gap-3 card-shadow rounded-md"
+          className="bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 flex justify-center flex-wrap card-shadow rounded-md"
         >
-          <div>
-            <div className="flex flex-wrap gap-4">
-              <div>
-                <h4 className="mb-1">Types</h4>
-                <select
-                  className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
-                  value={filter.type}
-                  onChange={(e) => setFilter({ ...filter, type: e.target.value })}
-                >
-                  <option value="">All Types</option>
-                  <option value="Apartment">Apartment</option>
-                  <option value="House">House</option>
-                  <option value="Commercial">Commercial</option>
-                </select>
-              </div>
-              <div>
-                <h4 className="mb-1">Status</h4>
-                <select
-                  className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
-                  value={filter.status}
-                  onChange={(e) => setFilter({ ...filter, status: e.target.value })}
-                >
-                  <option value="">All Statuses</option>
-                  <option value="Available">Available</option>
-                  <option value="Rented">Rented</option>
-                </select>
-              </div>
-              <div>
-                <h4 className="mb-1">Sort By</h4>
-                <select
-                  className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
-                  value={sortConfig.key}
-                  onChange={(e) => handleSort(e.target.value)}
-                >
-                  <option value="">None</option>
-                  {
-                    labelKeyList.map((column, index) => (
-                      <option key={column.key + index} value={column.key}>{column.label}</option>
-                    ))
-                  }
-                </select>
-              </div>
-              {sortConfig.key &&
-                <div>
-                  <h4 className="mb-1">Sort Order</h4>
-                  <select
-                    className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
-                    value={sortConfig.order}
-                    onChange={(e) => handleSortOrder(e.target.value)}
-                  >
-                    <option value="ascending">Ascending</option>
-                    <option value="descending">Descending</option>
-                  </select>
-                </div>
-              }
-            </div>
+          <div className="md:w-1/4 w-1/2 p-2">
+            <h4 className="mb-1">Types</h4>
+            <select
+              className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+              value={filter.type}
+              onChange={(e) => setFilter({ ...filter, type: e.target.value })}
+            >
+              <option value="">All Types</option>
+              <option value="Apartment">Apartment</option>
+              <option value="House">House</option>
+              <option value="Commercial">Commercial</option>
+            </select>
           </div>
+          <div className="md:w-1/4 w-1/2 p-2">
+            <h4 className="mb-1">Status</h4>
+            <select
+              className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+              value={filter.status}
+              onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+            >
+              <option value="">All Statuses</option>
+              <option value="Available">Available</option>
+              <option value="Rented">Rented</option>
+            </select>
+          </div>
+          <div className="md:w-1/4 w-1/2 p-2">
+            <h4 className="mb-1">Sort By</h4>
+            <select
+              className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+              value={sortConfig.key}
+              onChange={(e) => handleSort(e.target.value)}
+            >
+              <option value="">None</option>
+              {
+                labelKeyList.map((column, index) => (
+                  <option key={column.key + index} value={column.key}>{column.label}</option>
+                ))
+              }
+            </select>
+          </div>
+          {sortConfig.key &&
+            <div className="md:w-1/4 w-1/2 p-2">
+              <h4 className="mb-1">Sort Order</h4>
+              <select
+                className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
+                value={sortConfig.order}
+                onChange={(e) => handleSortOrder(e.target.value)}
+              >
+                <option value="ascending">Ascending</option>
+                <option value="descending">Descending</option>
+              </select>
+            </div>
+          }
 
         </div>
       </section>
 
       {/* Properties List */}
-      <section className="relative">
-
-        <div className="flex justify-between flex-wrap  mb-4">
+      <section className="relative bg-[#ebffee71] dark:bg-[#ebffee2e]  rounded-md">
+        <div className="flex justify-between flex-wrap  p-4">
           <h2 className="text-lg font-bold">
             <span className="gradient-text">Properties</span>{` (${properties.length})`}
           </h2>
@@ -258,7 +261,7 @@ const PropertyDashboard = () => {
         </div>
         <div
           id="properties"
-          className="relative bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 card-shadow rounded-md w-full overflow-auto"
+          className="relative bg-white text-gray-600 dark:bg-white/10 dark:text-gray-100 p-4 card-shadow rounded-md w-full overflow-auto"
         >
           <table className="w-full">
             <thead>
@@ -362,6 +365,10 @@ const PropertyDashboard = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
           <div className="bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100  p-6 rounded-md shadow-lg w-96">
+            {
+            formValidationError &&
+            <h2 className="text-lg font-bold mb-4 text-red-500">{formValidationError}</h2>
+            }
             <h2 className="text-lg font-bold mb-4">Add New Property</h2>
             <div className="space-y-4">
               <input
@@ -398,7 +405,7 @@ const PropertyDashboard = () => {
             <div className="flex justify-end gap-4 mt-4">
               <button
                 className="btn-shadow-hover bg-gray-300 text-gray-700 px-4 py-2 rounded-full"
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => {setIsModalOpen(false);setFormValidationError(null)}}
               >
                 Cancel
               </button>
@@ -407,6 +414,27 @@ const PropertyDashboard = () => {
                 onClick={handleAddProperty}
               >
                 Add
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {confirmDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+          <div className="bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100  p-6 rounded-md shadow-lg w-96">
+            <h2 className="text-lg font-bold mb-4">Are you sure?</h2>
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                className="btn-shadow-hover bg-gray-300 text-gray-700 px-4 py-2 rounded-full"
+                onClick={() => setConfirmDeleteModal(null)}
+              >
+                Nop
+              </button>
+              <button
+                className="btn-shadow-hover bg-green-600 text-white px-4 py-2 rounded-full"
+                onClick={deleteProperty}
+              >
+                Sure
               </button>
             </div>
           </div>

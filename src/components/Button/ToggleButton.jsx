@@ -19,7 +19,7 @@ const ToggleButton = () => {
   }, [])
   return (
     <div className={styles.container}>
-      <label className={styles.toggle}>
+      <label className={`${styles.toggle} rounded-full bg-white dark:bg-green-900/30 border border-gray-200 dark:border-green-800 px-4 py-1 btn-shadow-hover`}>
         <input
           className={styles.input}
           type="checkbox"
