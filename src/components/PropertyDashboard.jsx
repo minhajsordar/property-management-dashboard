@@ -235,7 +235,7 @@ const PropertyDashboard = () => {
              }
             </div>
           </div>
-          <div className="animated-outline p-[2px] relative max-w-max max-h-max rounded-full overflow-hidden">
+          <div className="btn-shadow-hover animated-outline p-[2px] relative max-w-max max-h-max rounded-full overflow-hidden">
             <button
               className="dark:bg-[#19271b] bg-[#e1ece3] text-black dark:text-white px-4 py-2 rounded-full relative z-[999]"
               onClick={() => setIsModalOpen(true)}
@@ -325,13 +325,13 @@ const PropertyDashboard = () => {
                                 : "Available"
                             )
                           }
-                          className="text-sm bg-blue-500 text-white px-3 py-1 rounded-full  text-nowrap"
+                          className="text-sm bg-blue-500 text-white px-3 py-1 rounded-full text-nowrap transition-transform hover:scale-[1.1]"
                         >
                           Toggle Status
                         </button>
                         <button
                           onClick={() => handleDeleteProperty(property.id)}
-                          className="text-sm bg-red-500 text-white px-3 py-1 rounded-full  text-nowrap"
+                          className="text-sm bg-red-500 text-white px-3 py-1 rounded-full text-nowrap transition-transform hover:scale-[1.1]"
                         >
                           Delete
                         </button>
@@ -394,13 +394,13 @@ const PropertyDashboard = () => {
             </div>
             <div className="flex justify-end gap-4 mt-4">
               <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-full"
+                className="btn-shadow-hover bg-gray-300 text-gray-700 px-4 py-2 rounded-full"
                 onClick={() => setIsModalOpen(false)}
               >
                 Cancel
               </button>
               <button
-                className="bg-green-600 text-white px-4 py-2 rounded-full"
+                className="btn-shadow-hover bg-green-600 text-white px-4 py-2 rounded-full"
                 onClick={handleAddProperty}
               >
                 Add
