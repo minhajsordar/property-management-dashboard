@@ -231,7 +231,7 @@ const PropertyDashboard = () => {
               <h4 className="mb-1">Sort Order</h4>
               <select
                 className="border rounded-full py-2 px-4 w-full bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100"
-                value={sortConfig.order}
+                value={sortConfig.direction}
                 onChange={(e) => handleSortOrder(e.target.value)}
               >
                 <option value="ascending">Ascending</option>
@@ -353,6 +353,7 @@ const PropertyDashboard = () => {
             </tbody>
           </table>
         </div>
+        {/* gradient background */}
         <div className="section-background">
           <div className="background-gradient">
             <div className="gradient-line" />
@@ -419,6 +420,7 @@ const PropertyDashboard = () => {
           </div>
         </div>
       )}
+      {/* Confirm delete modal */}
       {confirmDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
           <div className="bg-white text-gray-600 dark:bg-[#474747] dark:text-gray-100  p-6 rounded-md shadow-lg w-96">
