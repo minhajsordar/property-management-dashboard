@@ -29,6 +29,13 @@ const PropertyDashboard = () => {
       updatedAt: staticDate,
     },
   ]
+  const labelKeyList = [
+    { label: "Name", key: "name" },
+    { label: "Type", key: "type" },
+    { label: "Status", key: "status" },
+    { label: "Created At", key: "createdAt" },
+    { label: "Updated At", key: "updatedAt" },
+  ]
   const [properties, setProperties] = useState(initialProperties);
   const [filteredProperties, setfilteredProperties] = useState(initialProperties)
   const [sortConfig, setSortConfig] = useState({ key: "createdAt", direction: "ascending" });
@@ -84,13 +91,22 @@ const PropertyDashboard = () => {
     setfilteredProperties(updatedProperties)
     localStorage.setItem("properties", JSON.stringify(updatedProperties));
   };
-  // Handle sort operation
+  // Handle sort key
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
     setSortConfig({ key, direction });
+  };
+  // Handle sort order
+  const handleSortOrder = (direction) => {
+    setSortConfig(state=>{
+      return{
+        key:state.key,
+        direction
+      }
+    });
   };
   // Update table on sorting, filtering, and adding new item.
   React.useEffect(() => {
@@ -163,7 +179,7 @@ const PropertyDashboard = () => {
           className="bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 flex justify-between items-end flex-wrap gap-3 card-shadow rounded-md"
         >
           <div>
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-wrap gap-4">
               <div>
                 <h4 className="mb-1">Types</h4>
                 <select
@@ -189,14 +205,43 @@ const PropertyDashboard = () => {
                   <option value="Rented">Rented</option>
                 </select>
               </div>
+              <div>
+                <h4 className="mb-1">Sort By</h4>
+                <select
+                  className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
+                  value={sortConfig.key}
+                  onChange={(e) => handleSort(e.target.value)}
+                >
+                  <option value="">None</option>
+                  {
+                    labelKeyList.map((column, index) => (
+                      <option key={column.key + index} value={column.key}>{column.label}</option>
+                    ))
+                  }
+                </select>
+              </div>
+             {sortConfig.key &&
+              <div>
+                <h4 className="mb-1">Sort Order</h4>
+                <select
+                  className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
+                  value={sortConfig.order}
+                  onChange={(e) => handleSortOrder(e.target.value)}
+                >
+                  <option value="ascending">Ascending</option>
+                  <option value="descending">Descending</option>
+                </select>
+              </div>
+             }
             </div>
           </div>
           <div className="animated-outline p-[2px] relative max-w-max max-h-max rounded-full overflow-hidden">
             <button
-              className="bg-[#1dd760] text-black px-4 py-2 rounded-full relative z-[999]"
+              className="dark:bg-[#19271b] bg-[#e1ece3] text-black dark:text-white px-4 py-2 rounded-full relative z-[999]"
               onClick={() => setIsModalOpen(true)}
             >
               Add New Property
+              
             </button>
           </div>
         </div>
@@ -215,13 +260,7 @@ const PropertyDashboard = () => {
           <table className="w-full">
             <thead>
               <tr>
-                {[
-                  { label: "Name", key: "name" },
-                  { label: "Type", key: "type" },
-                  { label: "Status", key: "status" },
-                  { label: "Created At", key: "createdAt" },
-                  { label: "Updated At", key: "updatedAt" },
-                ].map((column) => (
+                {labelKeyList.map((column) => (
                   <th
                     key={column.key}
                     className="text-left p-4 cursor-pointer"

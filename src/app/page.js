@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="">
       {/* Header */}
-      <header className="card-shadow bg-white dark:bg-black backdrop-blur-md bg-opacity-5">
+      <header className="card-shadow bg-white dark:bg-[#fff3] backdrop-blur-md bg-opacity-5">
         <div className="container mx-auto">
           <div className="mb-6 flex justify-between header-section px-6 py-3">
             <div></div>
@@ -18,6 +18,12 @@ export default function Home() {
               {/* Theme toggler */}
               <ToggleButton />
             </div>
+          </div>
+        </div>
+
+        <div className="section-background">
+          <div className="background-gradient">
+            <div className="gradient-line" />
           </div>
         </div>
       </header>
