@@ -430,7 +430,7 @@ const PropertyDashboard = () => {
                 className="btn-shadow-hover bg-gray-300 text-gray-700 px-4 py-2 rounded-full"
                 onClick={() => setConfirmDeleteModal(null)}
               >
-                Nop
+                Nope
               </button>
               <button
                 className="btn-shadow-hover bg-green-600 text-white px-4 py-2 rounded-full"
