@@ -101,9 +101,9 @@ const PropertyDashboard = () => {
   };
   // Handle sort order
   const handleSortOrder = (direction) => {
-    setSortConfig(state=>{
-      return{
-        key:state.key,
+    setSortConfig(state => {
+      return {
+        key: state.key,
         direction
       }
     });
@@ -220,39 +220,42 @@ const PropertyDashboard = () => {
                   }
                 </select>
               </div>
-             {sortConfig.key &&
-              <div>
-                <h4 className="mb-1">Sort Order</h4>
-                <select
-                  className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
-                  value={sortConfig.order}
-                  onChange={(e) => handleSortOrder(e.target.value)}
-                >
-                  <option value="ascending">Ascending</option>
-                  <option value="descending">Descending</option>
-                </select>
-              </div>
-             }
+              {sortConfig.key &&
+                <div>
+                  <h4 className="mb-1">Sort Order</h4>
+                  <select
+                    className="border rounded-md p-2 w-full md:w-auto bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 "
+                    value={sortConfig.order}
+                    onChange={(e) => handleSortOrder(e.target.value)}
+                  >
+                    <option value="ascending">Ascending</option>
+                    <option value="descending">Descending</option>
+                  </select>
+                </div>
+              }
             </div>
           </div>
-          <div className="btn-shadow-hover animated-outline p-[2px] relative max-w-max max-h-max rounded-full overflow-hidden">
-            <button
-              className="dark:bg-[#19271b] bg-[#e1ece3] text-black dark:text-white px-4 py-2 rounded-full relative z-[999]"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Add New Property
-              
-            </button>
-          </div>
+
         </div>
       </section>
 
       {/* Properties List */}
       <section className="relative">
 
-        <h2 className="text-lg font-bold mb-4">
-          <span className="gradient-text">Properties</span>{` (${properties.length})`}
-        </h2>
+        <div className="flex justify-between flex-wrap  mb-4">
+          <h2 className="text-lg font-bold">
+            <span className="gradient-text">Properties</span>{` (${properties.length})`}
+          </h2>
+          <div className="hover:scale-[1.05] animated-outline p-[2px] relative max-w-max max-h-max rounded-full overflow-hidden">
+            <button
+              className="dark:bg-[#3e4640] bg-[#e1ece3] text-black dark:text-white px-4 py-2 rounded-full relative z-[999]"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Add New Property
+
+            </button>
+          </div>
+        </div>
         <div
           id="properties"
           className="relative bg-white text-gray-600 dark:bg-white/20 dark:text-gray-100 p-4 card-shadow rounded-md w-full overflow-auto"
