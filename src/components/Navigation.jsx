@@ -23,13 +23,13 @@ const Navigation = () => {
     }
     return (
         <div className='flex gap-3'>
-            <Link className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1"
+            <Link className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1 btn-shadow-hover"
                 onClick={handleClickLink}
                 href="#filter"
             >
                 Filter
             </Link>
-            <Link className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1"
+            <Link className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1 btn-shadow-hover"
                 onClick={handleClickLink}
                 href="#properties"
             >

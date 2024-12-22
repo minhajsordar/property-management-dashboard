@@ -14,7 +14,7 @@ export default function Home() {
             <div>
               <Navigation/>
             </div>
-            <div className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1">
+            <div className="rounded-full bg-white dark:bg-green-900 border border-gray-200 dark:border-green-800 px-4 py-1 btn-shadow-hover">
               {/* Theme toggler */}
               <ToggleButton />
             </div>
