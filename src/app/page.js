@@ -2,6 +2,7 @@ import React from "react";
 import ToggleButton from "@/components/Button/ToggleButton";
 import Navigation from "@/components/Navigation";
 import PropertyDashboard from "@/components/PropertyDashboard";
+import InjectedScript from "@/components/InjectedScript";
 
 export default function Home() {
   return (
@@ -28,7 +29,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-
       <main className="container mx-auto">
         {/* property dashboard */}
         <PropertyDashboard />
@@ -41,6 +41,7 @@ export default function Home() {
           All right reserved 2024
         </a>
       </footer>
+      <InjectedScript/>
     </React.Fragment>
   );
 }
